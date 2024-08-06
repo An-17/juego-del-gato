@@ -1,0 +1,13 @@
+.contenedorPrincipal{
+    display: grid;
+    grid-template-columns: repeat(3,33%);
+    grid-template-rows: repeat(3, 30%);
+    height: 200px;
+    width: 20%;
+   margin-left: 39%;
+   margin-top: 15%;
+}
+
+.celdas{
+border: 1px solid black;
+}
