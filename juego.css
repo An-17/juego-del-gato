@@ -1,13 +1,26 @@
 .contenedorPrincipal{
     display: grid;
     grid-template-columns: repeat(3,33%);
-    grid-template-rows: repeat(3, 30%);
+    grid-template-rows: repeat(3, 40%);
     height: 200px;
     width: 20%;
-   margin-left: 39%;
-   margin-top: 15%;
+   margin-left: 40%;
+   border: 1px  rgb(255, 255, 255);
+
 }
 
 .celdas{
-border: 1px solid black;
+border: 3px solid rgb(255, 255, 255);
+text-align: center;
+
+}
+
+
+
+body{
+ background-repeat: no-repeat;
+ background-image: url(img/fondo.webp);
+background-position: center;
+background-size: cover;
+  
 }
