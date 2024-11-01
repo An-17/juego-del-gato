@@ -1,26 +1,70 @@
-.contenedorPrincipal{
+body {
+    background-repeat: no-repeat;
+    background-color: rgb(129, 129, 129);
+    background-position: center;
+    background-size: cover;
+}
+
+.contenedorPrincipal {
     display: grid;
-    grid-template-columns: repeat(3,33%);
-    grid-template-rows: repeat(3, 40%);
-    height: 200px;
-    width: 20%;
-   margin-left: 40%;
-   border: 1px  rgb(255, 255, 255);
-
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 300px;
+    width: 300px;
+    margin: auto;
+    border: 3px solid rgba(0, 0, 0, 0.5);
 }
 
-.celdas{
-border: 3px solid rgb(255, 255, 255);
-text-align: center;
-
+.celdas {
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-size: 60px; /* Tamaño grande para los emojis */
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    transition: color 0.3s, text-shadow 0.3s; /* Para animaciones */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.celdas:hover {
+    cursor: pointer;
+}
 
+/* Efecto Neón para X y O */
+.celdas[data-value="X"] {
+    color: #ff0099; /* Rosa */
+    text-shadow: 0 0 5px #ff0099, 0 0 10px #ff0099, 0 0 20px #ff0099;
+}
 
-body{
- background-repeat: no-repeat;
- background-image: url(img/fondo.webp);
-background-position: center;
-background-size: cover;
-  
+.celdas[data-value="O"] {
+    color: #0d0d0e; /* Azul */
+    text-shadow: 0 0 5px #000000, 0 0 10px #000000, 0 0 20px #000000;
+}
+
+.mensaje, .jugador, .computadora, .empates {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s; /* Efecto al pasar el mouse */
+    margin: 10px;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05); /* Aumentar el tamaño */
+}
+
+button:focus {
+    outline: none; /* Sin borde al enfocar */
 }

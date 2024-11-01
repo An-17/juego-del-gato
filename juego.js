@@ -1,251 +1,115 @@
-const espacios = document.querySelectorAll("div") // valor de celdas
-const contedor = document.getElementById("contenedorPrincipal") // section
-const juagador = document.getElementById("jugador")
-const computadora = document.getElementById("computadora")
+const espacios = document.querySelectorAll(".celdas");
+const mensaje = document.getElementById("mensaje");
+const computadora = document.getElementById("computadora");
+const jugador = document.getElementById("jugador");
+const empatesDisplay = document.getElementById("empates"); // Agrega este elemento en tu HTML
+const reiniciar = document.getElementById("reiniciar");
+const nuevaPartida = document.getElementById("nuevaPartida");
 
+let victoriaX = parseInt(localStorage.getItem("victoriaX")) || 0;
+let victoriaO = parseInt(localStorage.getItem("victoriaO")) || 0;
+let empates = parseInt(localStorage.getItem("empates")) || 0; // Contador de empates
+let juegoTerminado = false; // Controla si el juego ha terminado
 
+jugador.innerText = `Jugador X: ${victoriaX}`;
+computadora.innerText = `Jugador O: ${victoriaO}`;
+empatesDisplay.innerText = `Empates: ${empates}`; // Muestra el total de empates
 
-for (let index = 0; index < espacios.length; index++) { // recorre cada cuadrito 
+const combinacionesGanadoras = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // filas
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columnas
+    [0, 4, 8], [2, 4, 6]             // diagonales
+];
 
-  // para añadir x
-  espacios[index].addEventListener ("click", function () { 
+espacios.forEach((celda) => {
+    celda.addEventListener("click", function() {
+        if (!juegoTerminado && celda.textContent === "") {
+            celda.innerHTML = "X"; // Usar letra normal
+            celda.style.pointerEvents = "none"; // Desactivar la celda
 
-    espacios[index].innerHTML = "X"
-    
+            if (verificarVictoria("X")) return;
 
-  // Variable para O
-  let listaNueva = []
-  
+            let listaNueva = [];
+            espacios.forEach((celda) => {
+                if (celda.textContent === "") {
+                    listaNueva.push(celda);
+                }
+            });
 
-  // Para agregar O
-  for (let index = 0; index < espacios.length; index++) {
-    if (espacios[index].textContent === "") {
-      listaNueva.push(index)
-      
+            if (listaNueva.length > 0) {
+                let numeroAle = Math.floor(Math.random() * listaNueva.length);
+                listaNueva[numeroAle].innerHTML = "O"; // Usar letra normal
+                listaNueva[numeroAle].style.pointerEvents = "none"; // Desactivar la celda
+
+                if (verificarVictoria("O")) return;
+            }
+
+            verificarEmpate(); // Verificar si hay un empate
+        }
+    });
+});
+
+function verificarVictoria(jugador) {
+    for (let combinacion of combinacionesGanadoras) {
+        if (combinacion.every(index => espacios[index].textContent === jugador)) {
+            combinacion.forEach(index => {
+                espacios[index].style.backgroundColor = jugador === "X" ? "#ff0099" : "#0099ff"; // Colores
+            });
+            mensaje.innerText = `VICTORIA ${jugador} HA GANADO`;
+            if (jugador === "X") {
+                victoriaX++;
+                localStorage.setItem("victoriaX", victoriaX);
+            } else {
+                victoriaO++;
+                localStorage.setItem("victoriaO", victoriaO);
+            }
+            jugador.innerText = `Jugador X: ${victoriaX}`;
+            computadora.innerText = `Jugador O: ${victoriaO}`;
+            juegoTerminado = true; // Marcar el juego como terminado
+            return true;
+        }
     }
-   
-    
-  }
-
-  // para que O se ponga aleatoriamente 
-
-  let numeroAle = Math.floor(Math.random()* listaNueva.length)
-  
-  let listaA = listaNueva[numeroAle]
-
-  espacios[listaA].innerHTML="O"
-
-  espacios[listaA].style.pointerEvents = "none"
-  
-  espacios[index].style.pointerEvents = "none"
-
-
-////Validación de gane de X
-
-
-// primer fila
-   if (espacios[0].textContent === "X" && espacios[1].textContent === "X" && espacios[2].textContent === "X") {
-    espacios[0].style.backgroundColor = "blue" 
-    espacios[1].style.backgroundColor = "blue"
-    espacios[2].style.backgroundColor = "blue"
-    alert ("X ha ganado")
-
- // Segunda fila 
-  
-} else {
-    if (espacios[3].textContent === "X" && espacios[4].textContent === "X" && espacios[5].textContent === "X") {
-    espacios[3].style.backgroundColor = "blue" 
-    espacios[4].style.backgroundColor = "blue"
-    espacios[5].style.backgroundColor = "blue"
-      alert ("X ha ganado")
-
-// Tercer fila
-
-  } else {
-      if (espacios[6].textContent === "X" && espacios[7].textContent === "X" && espacios[8].textContent === "X") {
-        espacios[6].style.backgroundColor = "blue" 
-        espacios[7].style.backgroundColor = "blue"
-        espacios[8].style.backgroundColor = "blue"
-        alert ("X ha ganado")
-
-// Primer columna
-     } else {
-
-      if (espacios[0].textContent === "X" && espacios[3].textContent === "X" && espacios[6].textContent === "X") {
-        espacios[0].style.backgroundColor = "blue" 
-        espacios[3].style.backgroundColor = "blue"
-        espacios[6].style.backgroundColor = "blue"
-        alert ("X ha ganado")
-
-// Segunda columna 
-      } else {
-    
-        if (espacios[1].textContent === "X" && espacios[4].textContent === "X" && espacios[7].textContent === "X") {
-          espacios[1].style.backgroundColor = "blue" 
-          espacios[4].style.backgroundColor = "blue"
-          espacios[7].style.backgroundColor = "blue"
-          alert ("X ha ganado")
-
-// Tercera columna
-      } else {
-        if (espacios[2].textContent === "X" && espacios[5].textContent === "X" && espacios[8].textContent === "X") {
-          espacios[2].style.backgroundColor = "blue" 
-          espacios[5].style.backgroundColor = "blue"
-          espacios[8].style.backgroundColor = "blue"
-           alert("X ha ganado")
-
-// Primer linea diagonal 
-        } else {
-
-        if (espacios[0].textContent === "X" && espacios[4].textContent === "X" && espacios[8].textContent === "X") {
-          espacios[0].style.backgroundColor = "blue" 
-          espacios[4].style.backgroundColor = "blue"
-          espacios[8].style.backgroundColor = "blue" 
-          alert ("X ha ganado")
-
-
-// Segunda linea diagonal 
-        } else {
-
-          if (espacios[2].textContent === "X" && espacios[4].textContent === "X" && espacios[6].textContent === "X") {
-           espacios[2].style.backgroundColor = "blue" 
-           espacios[4].style.backgroundColor = "blue"
-           espacios[6].style.backgroundColor = "blue"  
-            alert ("X ha ganado")
-          } else {
-            
-          }
-          
-        }  
-          
-        }
-
-          
-        }
-
-        
-      }
-      
-     }
-    
-  }
-  
+    return false;
 }
 
-
-
-// Validación de O
-
-// primer fila
-if (espacios[0].textContent === "O" && espacios[1].textContent === "O" && espacios[2].textContent === "O") {
-    espacios[0].style.backgroundColor = "purple" 
-    espacios[1].style.backgroundColor = "purple"
-    espacios[2].style.backgroundColor = "purple"
-  alert ("O ha ganado")
-
-// Segunda fila 
-
-} else {
-  if (espacios[3].textContent === "O" && espacios[4].textContent === "O" && espacios[5].textContent === "O") {
-    espacios[3].style.backgroundColor = "purple" 
-    espacios[4].style.backgroundColor = "purple"
-    espacios[5].style.backgroundColor = "purple"
-    alert ("O ha ganado")
-  
-  // Tercer fila
-  
-  } else {
-    if (espacios[6].textContent === "O" && espacios[7].textContent === "O" && espacios[8].textContent === "O") {
-      espacios[6].style.backgroundColor = "purple" 
-      espacios[7].style.backgroundColor = "purple"
-      espacios[8].style.backgroundColor = "purple"
-      alert ("O ha ganado")
-  
-  // Primer columna
-   } else {
-  
-    if (espacios[0].textContent === "O" && espacios[3].textContent === "O" && espacios[6].textContent === "O") {
-      espacios[0].style.backgroundColor = "purple" 
-      espacios[3].style.backgroundColor = "purple"
-      espacios[6].style.backgroundColor = "purple"
-      alert ("O ha ganado")
-  
-  // Segunda columna 
-    } else {
-  
-      if (espacios[1].textContent === "O" && espacios[4].textContent === "O" && espacios[7].textContent === "O") {
-        espacios[1].style.backgroundColor = "purple" 
-        espacios[4].style.backgroundColor = "purple"
-        espacios[7].style.backgroundColor = "purple"
-        alert ("O ha ganado")
-  
-  // Tercera columna
-    } else {
-      if (espacios[2].textContent === "O" && espacios[5].textContent === "O" && espacios[8].textContent === "O") {
-        espacios[2].style.backgroundColor = "purple" 
-        espacios[5].style.backgroundColor = "purple"
-        espacios[8].style.backgroundColor = "purple"
-        alert("O ha ganado")
-  
-  // Primer linea diagonal 
-      } else {
-  
-      if (espacios[0].textContent === "O" && espacios[4].textContent === "O" && espacios[8].textContent === "O") {
-        espacios[0].style.backgroundColor = "purple" 
-        espacios[4].style.backgroundColor = "purple"
-        espacios[8].style.backgroundColor = "purple"
-        alert ("O ha ganado")
-  
-  
-  // Segunda linea diagonal 
-      } else {
-  
-        if (espacios[2].textContent === "O" && espacios[4].textContent === "O" && espacios[6].textContent === "O") {
-          espacios[2].style.backgroundColor = "purple" 
-          espacios[4].style.backgroundColor = "purple"
-          espacios[6].style.backgroundColor = "purple"
-          alert ("O ha ganado")
-        } else {
-          
-        }
-        
-      }  
-        
-      }
-  
-        
-      }
-  
-      
+function verificarEmpate() {
+    // Verificar si todas las celdas están llenas
+    if ([...espacios].every(celda => celda.textContent !== "") && !juegoTerminado) {
+        mensaje.innerText = "¡Es un empate!";
+        empates++;
+        localStorage.setItem("empates", empates); // Guardar empates
+        empatesDisplay.innerText = `Empates: ${empates}`; // Actualizar el contador de empates
+        juegoTerminado = true; // Marcar el juego como terminado
     }
-    
-   }
-  
-  }
-
 }
 
+reiniciar.addEventListener("click", function() {
+    // Reinicia el juego completamente
+    localStorage.removeItem("victoriaX");
+    localStorage.removeItem("victoriaO");
+    localStorage.removeItem("empates");
+    victoriaX = 0;
+    victoriaO = 0;
+    empates = 0; // Reiniciar empates
+    jugador.innerText = `Jugador X: ${victoriaX}`;
+    computadora.innerText = `Jugador O: ${victoriaO}`;
+    empatesDisplay.innerText = `Empates: ${empates}`; // Reiniciar el contador de empates
+    mensaje.innerText = "";
+    limpiarTablero();
+});
 
+nuevaPartida.addEventListener("click", function() {
+    // Solo limpia el tablero sin afectar los puntajes
+    limpiarTablero();
+});
 
-
-
- 
-
-
-
-                                                                                                                        
-
-
-
-
-     
-
-
-
-
-
-    
-  }) 
-
-
+function limpiarTablero() {
+    espacios.forEach(celda => {
+        celda.innerHTML = "";
+        celda.style.pointerEvents = "auto"; // Reactivar las celdas
+        celda.style.backgroundColor = ""; // Limpiar el fondo
+    });
+    mensaje.innerText = "";
+    juegoTerminado = false; // Reiniciar el estado del juego
 }
+
